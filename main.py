@@ -62,8 +62,8 @@ class DHT20:
             valid = False
         # ステータスビットで、計測が完了しているか確認
         # (第0バイト,第7ビットが0であれば計測完了、データ有効)
-        if valid and b[0] & 0x80:
-            valid = False
+        if valid:
+            valid = b[0] & 0x80 == 0x00
         # CRCチェック
         if valid:
             # CRC-8 (CRC-8/MAXIM) 生成多項式: (x8)+x5+x4+1
