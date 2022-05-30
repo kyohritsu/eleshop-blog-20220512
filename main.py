@@ -1,4 +1,5 @@
 import machine
+import sys
 import time
 
 class Hardware:
@@ -28,6 +29,13 @@ class Hardware:
         self.trim_cold = machine.ADC(machine.Pin(self.PIN_TRIM_COLD))
         # I2C 初期化
         self.i2c = machine.I2C(1, freq=1000000)
+        # DHT20 初回の計測をトリガ
+        self.dht20_trigger_measurement()
+        # 周期タイマー (2秒) を設定し、DHT20 計測開始トリガをコールバックメソッドに指定
+        self.tim = machine.Timer(
+            period=2000, mode=machine.Timer.PERIODIC,
+            callback=self.dht20_trigger_measurement
+        )
 
     # マルチカラーLEDの各輝度を指定して出力
     def set_led(self, red, green, blue):
@@ -40,7 +48,7 @@ class Hardware:
         return [a.read_u16() / 65535 for a in [self.trim_cold, self.trim_hot]]
 
     # DHT20 へ計測開始をトリガ
-    def dht20_trigger_measurement(self):
+    def dht20_trigger_measurement(self, timer=None):
         # 約 10mS 待機
         time.sleep(0.01)
         # DHT20 へコマンドを書き込んで計測開始をトリガ
@@ -204,31 +212,38 @@ if __name__ == '__main__':
     REFERENCE_TEMPERATURE_LIMIT_HIGH = 40.0
     # 色相60度あたりの分解能 [bit]
     COLOR_DEPTH_BITS = 10
-    while True:
-        # 半固定抵抗のポジションを読み取り
-        trim_cold, trim_hot = hw.read_trim()
-        # 温点・冷点の各基準温度を求める
-        ref_cold, ref_hot = App.calibrate_references(
-            REFERENCE_TEMPERATURE_LIMIT_LOW,
-            REFERENCE_TEMPERATURE_LIMIT_HIGH,
-            trim_cold, trim_hot
-        )
-        # 温度データをセンサーから読み取り
-        hw.dht20_trigger_measurement()
-        r = hw.dht20_get_data()
-        t = DHT20.temperature(r) if DHT20.verify(r) else None
-        # 基準温度との関係から、LEDの色相を求めて
-        hue = App.temperature_to_huecode(t, ref_cold, ref_hot, COLOR_DEPTH_BITS)
-        r, g, b = App.huecode_to_rgb(hue, COLOR_DEPTH_BITS)
-        # マルチカラーLEDのPWM出力にセット
-        hw.set_led(r, g, b)
-        # シリアル出力
-        print(f'{'%04d' % int(trim_cold * 9999)}', end='')
-        print(f',{'%04d' % int(trim_hot * 9999)}', end='')
-        print(f',{'%+05d' % int(ref_cold * 100)}' , end='')
-        print(f',{'%+05d' % int(t * 100)}' , end='')
-        print(f',{'%+05d' % int(ref_hot * 100)}', end=''),
-        print(f',{'%+05d' % hue}')
-        #print(f'ref_cold={ref_cold}, ref_hot={ref_hot}')
-        #print(f'temperature={t}')
-        #print(f'data={''.join(['%02x' % i for i in r])}')
+    try:
+        while True:
+            # 半固定抵抗のポジションを読み取り
+            trim_cold, trim_hot = hw.read_trim()
+            # 温点・冷点の各基準温度を求める
+            ref_cold, ref_hot = App.calibrate_references(
+                REFERENCE_TEMPERATURE_LIMIT_LOW,
+                REFERENCE_TEMPERATURE_LIMIT_HIGH,
+                trim_cold, trim_hot
+            )
+            # 温度データをセンサー計測済みデータから取得
+            r = hw.dht20_get_data()
+            if DHT20.verify(r):
+                t = DHT20.temperature(r)
+            # 基準温度との関係から、LEDの色相を求めて
+            hue = App.temperature_to_huecode(t, ref_cold, ref_hot, COLOR_DEPTH_BITS)
+            r, g, b = App.huecode_to_rgb(hue, COLOR_DEPTH_BITS)
+            # マルチカラーLEDのPWM出力にセット
+            hw.set_led(r, g, b)
+            # シリアル出力
+            print(f'{'%04d' % int(trim_cold * 9999)}', end='')
+            print(f',{'%04d' % int(trim_hot * 9999)}', end='')
+            print(f',{'%+05d' % int(ref_cold * 100)}' , end='')
+            print(f',{'%+05d' % int(t * 100)}' , end='')
+            print(f',{'%+05d' % int(ref_hot * 100)}', end=''),
+            print(f',{'%+05d' % hue}')
+            #print(f'ref_cold={ref_cold}, ref_hot={ref_hot}')
+            #print(f'temperature={t}')
+            #print(f'data={''.join(['%02x' % i for i in r])}')
+    except KeyboardInterrupt:
+        # キーボード入力で停止
+        print('Quit...')
+        # 周期タイマーを停止
+        hw.tim.deinit()
+    sys.exit(0)
