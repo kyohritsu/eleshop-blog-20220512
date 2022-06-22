@@ -4,13 +4,13 @@
 
 ![完成写真](Photo_0.jpg)
 
-[エレショップblog](http://eleshop.blog.jp/) 2022年5月に掲載の記事「【初級者向け】XIAO RP2040で電子工作してみました！」で紹介する作例に関する資料を掲載します。
+[エレショップblog](https://eleshop.blog.jp/) 2022年5月に掲載の記事「【初級者向け】XIAO RP2040で電子工作してみました！」で紹介する作例に関する資料を掲載します。
 
-#### 記事本文 ([エレショップblog](http://eleshop.blog.jp/))
+#### 記事本文 ([エレショップblog](https://eleshop.blog.jp/))
 
-1. [【初級者向け】XIAO RP2040で電子工作してみました！★1](http://eleshop.blog.jp/archives/46407331.html) (2022年5月12日)
-1. [【初級者向け】XIAO RP2040で電子工作してみました！★2](http://eleshop.blog.jp/archives/46444637.html) (2022年5月19日)
-1. [【初級者向け】XIAO RP2040で電子工作してみました！★3](http://eleshop.blog.jp/archives/46490287.html) (2022年5月26日)
+1. [【初級者向け】XIAO RP2040で電子工作してみました！★1](https://eleshop.blog.jp/archives/46407331.html) (2022年5月12日)
+1. [【初級者向け】XIAO RP2040で電子工作してみました！★2](https://eleshop.blog.jp/archives/46444637.html) (2022年5月19日)
+1. [【初級者向け】XIAO RP2040で電子工作してみました！★3](https://eleshop.blog.jp/archives/46490287.html) (2022年5月26日)
 
 ## 利用について
 
@@ -56,9 +56,9 @@
 
 | 品名 | 型番 | 数量 |
 | ---- | ---- | ---- |
-| カプセル型ユニバーサル基板 ★[店舗ガチャガチャで販売中!!](http://eleshop.blog.jp/archives/46490287.html) |                     |  1 |
-| [ジュンフロンETFE電線0.51mm 10m 青](https://eleshop.jp/shop/g/gDAC13A/)                                  | ETFE0.51mm L-10m BL |  1 |
-| [ゼロ固定抵抗器Z (小型0Ωジャンパー)](https://eleshop.jp/shop/g/gE77364/)                                | Z16CS               |  1 |
+| カプセル型ユニバーサル基板 ★[店舗ガチャガチャで販売中!!](https://eleshop.blog.jp/archives/46490287.html) |                     |  1 |
+| [ジュンフロンETFE電線0.51mm 10m 青](https://eleshop.jp/shop/g/gDAC13A/)                                   | ETFE0.51mm L-10m BL |  1 |
+| [ゼロ固定抵抗器Z (小型0Ωジャンパー)](https://eleshop.jp/shop/g/gE77364/)                                 | Z16CS               |  1 |
 
 ### 電源ケーブル製作
 
